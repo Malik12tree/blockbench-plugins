@@ -1,8 +1,13 @@
 import { action } from "../actions.js";
-import { computeTriangleNormal, rotationFromDirection } from "../utils/utils.js";
+import { renderLine } from "../utils/docs.js";
+import { dontShowAgainInfo } from "../utils/info.js";
+import {
+  computeTriangleNormal,
+  rotationFromDirection,
+} from "../utils/utils.js";
 
 const reusableEuler1 = new THREE.Euler();
-function runEdit(mesh,selected, group, density, amend = false) {
+function runEdit(mesh, selected, group, density, amend = false) {
   const meshes = [];
   Undo.initEdit({ elements: meshes, selection: true, group }, amend);
   /**
@@ -73,6 +78,29 @@ export default action("scatter", function () {
     Blockbench.showQuickMessage("At least two meshes must be selected");
     return;
   }
+  dontShowAgainInfo(
+    "scatter_pivot",
+    "Good To Know",
+    [
+      "Scattered meshes are <b>relative</b> to their <u>pivot points</u> on the target surface.",
+
+      renderLine({
+        type: "inset_row",
+        items: [
+          {
+            type: "image",
+            src: "scatter_pivot_1.png",
+            caption: "Pivot point located on the bottom",
+          },
+          {
+            type: "image",
+            src: "scatter_pivot_2.png",
+            caption: "Pivot point located far down",
+          },
+        ],
+      }),
+    ].join("\n")
+  );
 
   const mesh = Mesh.selected.last();
   mesh.unselect();

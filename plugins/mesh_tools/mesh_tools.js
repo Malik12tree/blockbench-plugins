@@ -525,7 +525,13 @@
     constructor(id) {
       this.id = id;
     }
+    #isQualified() {
+      return this.id.startsWith("@");
+    }
     #qualifyKey(key) {
+      if (this.#isQualified()) {
+        return `${this.id}/${key}`;
+      }
       return `@${this.id}/${key}`;
     }
     set(key, value) {
@@ -536,7 +542,12 @@
     delete(key) {
       key = this.#qualifyKey(key);
 
-  	localStorage.removeItem(key);
+      localStorage.removeItem(key);
+    }
+    has(key) {
+      key = this.#qualifyKey(key);
+
+      return localStorage.hasOwnProperty(key);
     }
     get(key) {
       key = this.#qualifyKey(key);
@@ -551,6 +562,10 @@
       const value = this.get(key) ?? defaultValue;
       const newValue = callback(value);
       return this.set(key, newValue);
+    }
+
+    in(key) {
+      return new QualifiedStorage(this.#qualifyKey(key));
     }
   }
 
@@ -599,12 +614,12 @@
       for (const key of this.getAllKeys()) {
         super.delete(key);
       }
-  	keysStorage.delete(this.id);
+      keysStorage.delete(this.id);
     }
   }
 
   const PLUGIN_ID = "mesh_tools";
-  new QualifiedStorage(PLUGIN_ID);
+  const storage = new QualifiedStorage(PLUGIN_ID);
 
   const ACTIONS = _ACTIONS;
 
@@ -2440,8 +2455,91 @@
     );
   });
 
+  const LanguageDefinitions = {
+    "word.before": "Input",
+    "word.after": "Result",
+    "word.mesh": "Mesh",
+    "word.uv": "UV",
+  };
+  function getLanguage() {
+    return LanguageDefinitions;
+  }
+  function translate(subject) {
+    return subject.replace(/[a-zA-Z_][a-zA-Z0-9_\.]+/g, (key) => {
+      return getLanguage()[key] ?? key;
+    });
+  }
+  const getURL = (e) =>
+    //   `http://127.0.0.1:5500/${e}`;
+    `https://github.com/Malik12tree/blockbench-plugins/blob/master/src/mesh_tools/${e}?raw=true`;
+  function renderImage({ src, caption = "" }) {
+    return `
+  <figure>
+  <img style="image-rendering: auto;object-fit:contain;width: 250px; height: 250px;min-width: 100px" src="${getURL(
+    `assets/actions/${src}`
+  )}" />
+  <figcaption>${translate(caption)}</figcaption>
+  </figure>
+  `;
+  }
+  function renderOverflow(children) {
+    return `<content>${children}</content>`;
+  }
+  function renderInsetRow({ items }) {
+    return `<div style="display: flex;flex-wrap:wrap;">
+		${items
+      .map(
+        (e) =>
+          `<div style="border: 1px solid var(--color-dark);background: var(--color-back);">${renderLine(
+            e
+          )}</div>`
+      )
+      .join("\n")}
+	</div>
+	`;
+  }
+  function renderLine(options) {
+    if (typeof options == "string") return options;
+
+    switch (options.type) {
+      case "image":
+        return renderImage(options);
+      case "overflow":
+        return renderOverflow(options);
+      case "inset_row":
+        return renderInsetRow(options);
+      default:
+        throw new Error(`Unknown line type: ${options.type}`);
+    }
+  }
+
+  const dontShowAgainInfoStorage = storage.in("dont_show_again_info_storage");
+  function dontShowAgainInfo(id, title, message) {
+    if (dontShowAgainInfoStorage.has(id)) {
+      return;
+    }
+
+    const messageBox = Blockbench.showMessageBox(
+      {
+        title,
+        message,
+        icon: "info",
+        checkboxes: {
+          dont_show_again: { value: false, text: "dialog.dontshowagain" },
+        },
+        buttons: ["dialog.ok"],
+      },
+      (_, { dont_show_again: dontShowAgain }) => {
+        if (dontShowAgain) {
+          dontShowAgainInfoStorage.set(id, true);
+        }
+      }
+    );
+    messageBox.object.querySelector(".dialog_content").style.overflow = "auto";
+  }
+
   const reusableEuler1 = new THREE.Euler();
-  function runEdit$4(mesh,selected, group, density, amend = false) {
+  function runEdit$4(mesh, selected, group, density, amend = false) {
     const meshes = [];
     Undo.initEdit({ elements: meshes, selection: true, group }, amend);
     /**
@@ -2512,6 +2610,29 @@
       Blockbench.showQuickMessage("At least two meshes must be selected");
       return;
     }
+    dontShowAgainInfo(
+      "scatter_pivot",
+      "Good To Know",
+      [
+        "Scattered meshes are <b>relative</b> to their <u>pivot points</u> on the target surface.",
+
+        renderLine({
+          type: "inset_row",
+          items: [
+            {
+              type: "image",
+              src: "scatter_pivot_1.png",
+              caption: "Pivot point located on the bottom",
+            },
+            {
+              type: "image",
+              src: "scatter_pivot_2.png",
+              caption: "Pivot point located far down",
+            },
+          ],
+        }),
+      ].join("\n")
+    );
 
     const mesh = Mesh.selected.last();
     mesh.unselect();

@@ -3,7 +3,13 @@ class BasicQualifiedStorage {
   constructor(id) {
     this.id = id;
   }
+  #isQualified() {
+    return this.id.startsWith("@");
+  }
   #qualifyKey(key) {
+    if (this.#isQualified()) {
+      return `${this.id}/${key}`;
+    }
     return `@${this.id}/${key}`;
   }
   set(key, value) {
@@ -14,7 +20,12 @@ class BasicQualifiedStorage {
   delete(key) {
     key = this.#qualifyKey(key);
 
-	localStorage.removeItem(key);
+    localStorage.removeItem(key);
+  }
+  has(key) {
+    key = this.#qualifyKey(key);
+
+    return localStorage.hasOwnProperty(key);
   }
   get(key) {
     key = this.#qualifyKey(key);
@@ -29,6 +40,10 @@ class BasicQualifiedStorage {
     const value = this.get(key) ?? defaultValue;
     const newValue = callback(value);
     return this.set(key, newValue);
+  }
+
+  in(key) {
+    return new QualifiedStorage(this.#qualifyKey(key));
   }
 }
 
@@ -77,6 +92,6 @@ export class QualifiedStorage extends BasicQualifiedStorage {
     for (const key of this.getAllKeys()) {
       super.delete(key);
     }
-	keysStorage.delete(this.id)
+    keysStorage.delete(this.id);
   }
 }
