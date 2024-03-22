@@ -2539,9 +2539,11 @@
   }
 
   const reusableEuler1 = new THREE.Euler();
-  function runEdit$4(mesh, selected, group, density, amend = false) {
+  function runEdit$4(mesh, selected, density, amend = false) {
     const meshes = [];
-    Undo.initEdit({ elements: meshes, selection: true, group }, amend);
+
+    Undo.initEdit({ outliner: true, elements: [], selection: true }, amend);
+
     /**
      * @type {THREE.Mesh}
      */
@@ -2588,7 +2590,6 @@
 
       otherMesh.removeFromParent();
       otherMesh.parent = "root";
-      Outliner.root.push(otherMesh);
 
       const normal = computeTriangleNormal(t0, t1, t2);
 
@@ -2599,11 +2600,21 @@
 
       otherMesh.origin = pointF.toArray();
 
-      otherMesh.addTo(group);
       meshes.push(otherMesh);
     }
-    Undo.finishEdit("MTools: Scatter meshes");
-    Canvas.updatePositions();
+    const group = new Group({ name: "instances_on_" + mesh.name });
+    meshes.forEach((e) => {
+      // Outliner.root.push(otherMesh);
+      e.addTo(group);
+    });
+    group.init();
+
+    Undo.finishEdit("MTools: Scatter meshes", {
+      outliner: true,
+      elements: meshes,
+      selection: true,
+    });
+    Canvas.updateAll();
   }
   action("scatter", function () {
     if (Mesh.selected.length < 2) {
@@ -2637,11 +2648,8 @@
     const mesh = Mesh.selected.last();
     mesh.unselect();
 
-    const group = new Group({ name: "instances_on_" + mesh.name });
-    group.init();
-
     const selected = Mesh.selected.slice();
-    runEdit$4(mesh, selected, group, 3);
+    runEdit$4(mesh, selected, 3);
 
     Undo.amendEdit(
       {
@@ -2654,7 +2662,7 @@
         },
       },
       (form) => {
-        runEdit$4(mesh, selected, group, form.density, true);
+        runEdit$4(mesh, selected, form.density, true);
       }
     );
   });
