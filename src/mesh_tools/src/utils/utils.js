@@ -24,7 +24,7 @@ reusableObject.rotation.order = "XYZ";
 export function rotationFromDirection(
   target,
   targetEuler = new THREE.Euler(),
-  { rotateX = 0, rotateY = 0, rotateZ = 0 }
+  { rotateX = 0, rotateY = 0, rotateZ = 0 } = {}
 ) {
   reusableObject.lookAt(target);
   reusableObject.rotateX(Math.degToRad(90));
