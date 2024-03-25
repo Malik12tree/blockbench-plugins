@@ -147,8 +147,7 @@ Access From:
 </span>
 <p>Connects multiple edge loops with faces.</p>
 <div style="display:flex;flex-direction:column;gap: 5px;">
-
-	<div style="display: flex;flex-wrap:wrap;">
+<div style="display: flex;flex-wrap:wrap;">
 		<div style="border: 1px solid var(--color-dark);background: var(--color-back);">
   <figure>
   <img style="image-rendering: auto;object-fit:contain;width: 250px; height: 250px;min-width: 100px" src="https://github.com/Malik12tree/blockbench-plugins/blob/master/src/mesh_tools/assets/actions/bridge_edge_loops_before.png?raw=true" />
@@ -164,8 +163,7 @@ Access From:
 	</div>
 	
 Results with Blend Path enabled.
-
-	<div style="display: flex;flex-wrap:wrap;">
+<div style="display: flex;flex-wrap:wrap;">
 		<div style="border: 1px solid var(--color-dark);background: var(--color-back);">
   <figure>
   <img style="image-rendering: auto;object-fit:contain;width: 250px; height: 250px;min-width: 100px" src="https://github.com/Malik12tree/blockbench-plugins/blob/master/src/mesh_tools/assets/actions/bridge_edge_loops_before.png?raw=true" />
@@ -198,8 +196,7 @@ Access From:
 </span>
 <p>Casts selected vertices into a smooth, spherical shape with adjustable influence.</p>
 <div style="display:flex;flex-direction:column;gap: 5px;">
-
-	<div style="display: flex;flex-wrap:wrap;">
+<div style="display: flex;flex-wrap:wrap;">
 		<div style="border: 1px solid var(--color-dark);background: var(--color-back);">
   <figure>
   <img style="image-rendering: auto;object-fit:contain;width: 250px; height: 250px;min-width: 100px" src="https://github.com/Malik12tree/blockbench-plugins/blob/master/src/mesh_tools/assets/actions/to_sphere_1_before.png?raw=true" />
@@ -214,8 +211,7 @@ Access From:
   </div>
 	</div>
 	
-
-	<div style="display: flex;flex-wrap:wrap;">
+<div style="display: flex;flex-wrap:wrap;">
 		<div style="border: 1px solid var(--color-dark);background: var(--color-back);">
   <figure>
   <img style="image-rendering: auto;object-fit:contain;width: 250px; height: 250px;min-width: 100px" src="https://github.com/Malik12tree/blockbench-plugins/blob/master/src/mesh_tools/assets/actions/to_sphere_2_before.png?raw=true" />
@@ -248,8 +244,7 @@ Access From:
 </span>
 <p>Smoothens selected vertices by averaging the position of neighboring vertices.</p>
 <div style="display:flex;flex-direction:column;gap: 5px;">
-
-	<div style="display: flex;flex-wrap:wrap;">
+<div style="display: flex;flex-wrap:wrap;">
 		<div style="border: 1px solid var(--color-dark);background: var(--color-back);">
   <figure>
   <img style="image-rendering: auto;object-fit:contain;width: 250px; height: 250px;min-width: 100px" src="https://github.com/Malik12tree/blockbench-plugins/blob/master/src/mesh_tools/assets/actions/laplacian_smooth_before.png?raw=true" />
@@ -282,8 +277,7 @@ Access From:
 </span>
 <p>Generates a fan out of a face.</p>
 <div style="display:flex;flex-direction:column;gap: 5px;">
-
-	<div style="display: flex;flex-wrap:wrap;">
+<div style="display: flex;flex-wrap:wrap;">
 		<div style="border: 1px solid var(--color-dark);background: var(--color-back);">
   <figure>
   <img style="image-rendering: auto;object-fit:contain;width: 250px; height: 250px;min-width: 100px" src="https://github.com/Malik12tree/blockbench-plugins/blob/master/src/mesh_tools/assets/actions/poke_before.png?raw=true" />
@@ -316,8 +310,7 @@ Access From:
 </span>
 <p>Attempts to merge adjacent triangles into quadrilaterals.</p>
 <div style="display:flex;flex-direction:column;gap: 5px;">
-
-	<div style="display: flex;flex-wrap:wrap;">
+<div style="display: flex;flex-wrap:wrap;">
 		<div style="border: 1px solid var(--color-dark);background: var(--color-back);">
   <figure>
   <img style="image-rendering: auto;object-fit:contain;width: 250px; height: 250px;min-width: 100px" src="https://github.com/Malik12tree/blockbench-plugins/blob/master/src/mesh_tools/assets/actions/tris_to_quad_before.png?raw=true" />
@@ -350,8 +343,7 @@ Access From:
 </span>
 <p>Splits selected faces into triangles.</p>
 <div style="display:flex;flex-direction:column;gap: 5px;">
-
-	<div style="display: flex;flex-wrap:wrap;">
+<div style="display: flex;flex-wrap:wrap;">
 		<div style="border: 1px solid var(--color-dark);background: var(--color-back);">
   <figure>
   <img style="image-rendering: auto;object-fit:contain;width: 250px; height: 250px;min-width: 100px" src="https://github.com/Malik12tree/blockbench-plugins/blob/master/src/mesh_tools/assets/actions/triangulate_before.png?raw=true" />
@@ -387,8 +379,7 @@ Access From:
 </span>
 <p>Projects the selected faces to the UV map from the camera.</p>
 <div style="display:flex;flex-direction:column;gap: 5px;">
-
-	<div style="display: flex;flex-wrap:wrap;">
+<div style="display: flex;flex-wrap:wrap;">
 		<div style="border: 1px solid var(--color-dark);background: var(--color-back);">
   <figure>
   <img style="image-rendering: auto;object-fit:contain;width: 250px; height: 250px;min-width: 100px" src="https://github.com/Malik12tree/blockbench-plugins/blob/master/src/mesh_tools/assets/actions/uv_project_view_solid.png?raw=true" />
@@ -424,8 +415,7 @@ Access From:
 </span>
 <p>Unwraps the UV map from the 6 sides of a cube.</p>
 <div style="display:flex;flex-direction:column;gap: 5px;">
-
-	<div style="display: flex;flex-wrap:wrap;">
+<div style="display: flex;flex-wrap:wrap;">
 		<div style="border: 1px solid var(--color-dark);background: var(--color-back);">
   <figure>
   <img style="image-rendering: auto;object-fit:contain;width: 250px; height: 250px;min-width: 100px" src="https://github.com/Malik12tree/blockbench-plugins/blob/master/src/mesh_tools/assets/actions/uv_turnaround_projection_solid.png?raw=true" />
@@ -499,8 +489,7 @@ Access From:
 </span>
 <p>Splits the faces of a mesh into smaller faces, giving it a smooth appearance.</p>
 <div style="display:flex;flex-direction:column;gap: 5px;">
-
-	<div style="display: flex;flex-wrap:wrap;">
+<div style="display: flex;flex-wrap:wrap;">
 		<div style="border: 1px solid var(--color-dark);background: var(--color-back);">
   <figure>
   <img style="image-rendering: auto;object-fit:contain;width: 250px; height: 250px;min-width: 100px" src="https://github.com/Malik12tree/blockbench-plugins/blob/master/src/mesh_tools/assets/actions/subdivide_before.png?raw=true" />
@@ -533,8 +522,7 @@ Access From:
 </span>
 <p>Splits and duplicates edges within a mesh, breaking 'links' between faces around those split edges.</p>
 <div style="display:flex;flex-direction:column;gap: 5px;">
-
-	<div style="display: flex;flex-wrap:wrap;">
+<div style="display: flex;flex-wrap:wrap;">
 		<div style="border: 1px solid var(--color-dark);background: var(--color-back);">
   <figure>
   <img style="image-rendering: auto;object-fit:contain;width: 250px; height: 250px;min-width: 100px" src="https://github.com/Malik12tree/blockbench-plugins/blob/master/src/mesh_tools/assets/actions/split_edges.png?raw=true" />
@@ -561,8 +549,7 @@ Access From:
 </span>
 <p>Scatters selected meshes on the active mesh.</p>
 <div style="display:flex;flex-direction:column;gap: 5px;">
-
-	<div style="display: flex;flex-wrap:wrap;">
+<div style="display: flex;flex-wrap:wrap;">
 		<div style="border: 1px solid var(--color-dark);background: var(--color-back);">
   <figure>
   <img style="image-rendering: auto;object-fit:contain;width: 250px; height: 250px;min-width: 100px" src="https://github.com/Malik12tree/blockbench-plugins/blob/master/src/mesh_tools/assets/actions/scatter.png?raw=true" />
@@ -589,8 +576,7 @@ Access From:
 </span>
 <p>Generates an array of copies of the base object, with each copy being offset from the previous one.</p>
 <div style="display:flex;flex-direction:column;gap: 5px;">
-
-	<div style="display: flex;flex-wrap:wrap;">
+<div style="display: flex;flex-wrap:wrap;">
 		<div style="border: 1px solid var(--color-dark);background: var(--color-back);">
   <figure>
   <img style="image-rendering: auto;object-fit:contain;width: 250px; height: 250px;min-width: 100px" src="https://github.com/Malik12tree/blockbench-plugins/blob/master/src/mesh_tools/assets/actions/array.png?raw=true" />
@@ -620,8 +606,7 @@ Access From:
 </span>
 <p>Generates terrains procedurally with fully customized settings.</p>
 <div style="display:flex;flex-direction:column;gap: 5px;">
-
-	<div style="display: flex;flex-wrap:wrap;">
+<div style="display: flex;flex-wrap:wrap;">
 		<div style="border: 1px solid var(--color-dark);background: var(--color-back);">
   <figure>
   <img style="image-rendering: auto;object-fit:contain;width: 250px; height: 250px;min-width: 100px" src="https://github.com/Malik12tree/blockbench-plugins/blob/master/src/mesh_tools/assets/actions/terrain_solid.png?raw=true" />
@@ -673,8 +658,7 @@ Access From:
 </span>
 <p>Converts text into a 3D object, ideal for creating signs or logos.</p>
 <div style="display:flex;flex-direction:column;gap: 5px;">
-
-	<div style="display: flex;flex-wrap:wrap;">
+<div style="display: flex;flex-wrap:wrap;">
 		<div style="border: 1px solid var(--color-dark);background: var(--color-back);">
   <figure>
   <img style="image-rendering: auto;object-fit:contain;width: 250px; height: 250px;min-width: 100px" src="https://github.com/Malik12tree/blockbench-plugins/blob/master/src/mesh_tools/assets/actions/text.png?raw=true" />
@@ -701,8 +685,7 @@ Access From:
 </span>
 <p>Generates an xyz surface based on mathematical equations containing 23 pre-built presets!</p>
 <div style="display:flex;flex-direction:column;gap: 5px;">
-
-	<div style="display: flex;flex-wrap:wrap;">
+<div style="display: flex;flex-wrap:wrap;">
 		<div style="border: 1px solid var(--color-dark);background: var(--color-back);">
   <figure>
   <img style="image-rendering: auto;object-fit:contain;width: 250px; height: 250px;min-width: 100px" src="https://github.com/Malik12tree/blockbench-plugins/blob/master/src/mesh_tools/assets/actions/xyz.png?raw=true" />
@@ -732,8 +715,7 @@ Access From:
 </span>
 <p>Generate a polyhedron such as an Icosahedron, a Dodecahedron, an Octahedron or a Tetrahedron.</p>
 <div style="display:flex;flex-direction:column;gap: 5px;">
-
-	<div style="display: flex;flex-wrap:wrap;">
+<div style="display: flex;flex-wrap:wrap;">
 		<div style="border: 1px solid var(--color-dark);background: var(--color-back);">
   <figure>
   <img style="image-rendering: auto;object-fit:contain;width: 250px; height: 250px;min-width: 100px" src="https://github.com/Malik12tree/blockbench-plugins/blob/master/src/mesh_tools/assets/actions/polyhedron.png?raw=true" />
@@ -763,8 +745,7 @@ Access From:
 </span>
 <p>Generate a Torus Knot with fully customized settings.</p>
 <div style="display:flex;flex-direction:column;gap: 5px;">
-
-	<div style="display: flex;flex-wrap:wrap;">
+<div style="display: flex;flex-wrap:wrap;">
 		<div style="border: 1px solid var(--color-dark);background: var(--color-back);">
   <figure>
   <img style="image-rendering: auto;object-fit:contain;width: 250px; height: 250px;min-width: 100px" src="https://github.com/Malik12tree/blockbench-plugins/blob/master/src/mesh_tools/assets/actions/torus_knot.png?raw=true" />

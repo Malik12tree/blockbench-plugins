@@ -21,9 +21,16 @@ for (let x = 0; x < 256; x++) gradient256[[x, 0]] = x / 255;
  */
 const reusableObject = new THREE.Object3D();
 reusableObject.rotation.order = "XYZ";
-export function rotationFromDirection(target, targetEuler = new THREE.Euler()) {
+export function rotationFromDirection(
+  target,
+  targetEuler = new THREE.Euler(),
+  { rotateX = 0, rotateY = 0, rotateZ = 0 }
+) {
   reusableObject.lookAt(target);
   reusableObject.rotateX(Math.degToRad(90));
+  reusableObject.rotateX(rotateX);
+  reusableObject.rotateY(rotateY);
+  reusableObject.rotateZ(rotateZ);
 
   targetEuler.copy(reusableObject.rotation);
   return targetEuler;
@@ -786,9 +793,9 @@ export function CubicBezierTangent(t, p0, p1, p2, p3) {
   );
 }
 /**
- * 
- * @param {string} message 
- * @param {?number} timeout 
+ *
+ * @param {string} message
+ * @param {?number} timeout
  * @returns {never}
  */
 export function throwQuickMessage(message, timeout) {

@@ -13,7 +13,7 @@ export function translate(subject) {
   });
 }
 const getURL = (e) =>
-  //   `http://127.0.0.1:5500/${e}`;
+    // `http://127.0.0.1:5500/${e}?t=${Math.random()}`;
   `https://github.com/Malik12tree/blockbench-plugins/blob/master/src/mesh_tools/${e}?raw=true`;
 
 export function renderPill(title) {
