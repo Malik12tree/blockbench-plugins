@@ -677,6 +677,58 @@
     return new Action(qualifyName(id), options);
   }
 
+  class Neighborhood {
+    /**
+     *
+     * @param {Mesh} mesh
+     * @returns
+     */
+    static VertexFaces(mesh) {
+      const map = {};
+
+      for (const key in mesh.faces) {
+        const face = mesh.faces[key];
+
+        face.vertices.forEach((vkey) => {
+          if (!(vkey in map)) {
+            map[vkey] = [];
+          }
+
+          face.vertices.forEach((neighborkey) => {
+            if (neighborkey == vkey) return;
+
+            map[vkey].safePush(neighborkey);
+          });
+        });
+      }
+
+      return map;
+    }
+
+    /**
+     *
+     * @param {Mesh} mesh
+     * @returns {{[edgeKey: string]: MeshFace[]}}
+     */
+    static EdgeFaces(mesh) {
+      const neighborhood = {};
+      for (const key in mesh.faces) {
+        const face = mesh.faces[key];
+        const vertices = face.getSortedVertices();
+
+        for (let i = 0; i < vertices.length; i++) {
+          const vertexCurr = vertices[i];
+          const vertexNext = vertices[(i + 1) % vertices.length];
+          const edgeKey = getEdgeKey(vertexCurr, vertexNext);
+          neighborhood[edgeKey] ??= [];
+          neighborhood[edgeKey].safePush(face);
+        }
+      }
+      return neighborhood;
+    }
+    static VertexEdges() {}
+  }
+
   function xKey(obj) {
     if (obj instanceof THREE.Vector3 || obj instanceof THREE.Vector2) {
       return "x";
@@ -829,29 +881,6 @@
 
   function easeInOutSine(x) {
     return -(Math.cos(Math.PI * x) - 1) / 2;
-  }
-
-  /** @param {Mesh} mesh */
-  function computeVertexNeighborhood(mesh) {
-    const map = {};
-
-    for (const key in mesh.faces) {
-      const face = mesh.faces[key];
-
-      face.vertices.forEach((vkey) => {
-        if (!(vkey in map)) {
-          map[vkey] = [];
-        }
-
-        face.vertices.forEach((neighborkey) => {
-          if (neighborkey == vkey) return;
-
-          map[vkey].safePush(neighborkey);
-        });
-      });
-    }
-
-    return map;
   }
 
   function getAdjacentElements(arr, index) {
@@ -1187,7 +1216,7 @@
     const selectedConnectedCount = {};
     const connectedCount = {};
 
-    const neighborhood = computeEdgeFacesNeighborhood(mesh);
+    const neighborhood = Neighborhood.EdgeFaces(mesh);
 
     for (const [a, b] of edges) {
       const edgeKey = getEdgeKey(a, b);
@@ -1204,27 +1233,6 @@
       }
     }
     return { connectedCount, selectedConnectedCount };
-  }
-  /**
-   *
-   * @param {Mesh} mesh
-   * @returns {{[edgeKey: string]: MeshFace[]}}
-   */
-  function computeEdgeFacesNeighborhood(mesh) {
-    const neighborhood = {};
-    for (const key in mesh.faces) {
-      const face = mesh.faces[key];
-      const vertices = face.getSortedVertices();
-
-      for (let i = 0; i < vertices.length; i++) {
-        const vertexCurr = vertices[i];
-        const vertexNext = vertices[(i + 1) % vertices.length];
-        const edgeKey = getEdgeKey(vertexCurr, vertexNext);
-        neighborhood[edgeKey] ??= [];
-        neighborhood[edgeKey].safePush(face);
-      }
-    }
-    return neighborhood;
   }
 
   /**
@@ -1826,7 +1834,7 @@
 
   action("expand_selection", () => {
     Mesh.selected.forEach((mesh) => {
-      const neighborMap = computeVertexNeighborhood(mesh);
+      const neighborMap = Neighborhood.VertexFaces(mesh);
 
       const selectedVertices = mesh.getSelectedVertices();
       const selectedVertexSet = new Set(selectedVertices);
@@ -1850,7 +1858,7 @@
       if (!influence || !iterations) return; //
 
       const { vertices } = mesh;
-      const neighborMap = computeVertexNeighborhood(mesh);
+      const neighborMap = Neighborhood.VertexFaces(mesh);
 
       const selectedVertices = mesh.getSelectedVertices();
 
@@ -1957,7 +1965,7 @@
 
   action("shrink_selection", () => {
     Mesh.selected.forEach((mesh) => {
-      const neighborMap = computeVertexNeighborhood(mesh);
+      const neighborMap = Neighborhood.VertexFaces(mesh);
 
       const selectedVertices = mesh.getSelectedVertices();
       const selectedVertexSet = new Set(selectedVertices);

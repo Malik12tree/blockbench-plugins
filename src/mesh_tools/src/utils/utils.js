@@ -1,3 +1,4 @@
+import Neighborhood from "./mesh/neighborhood.js";
 import { addVectors, getX, getY, getZ, isZeroVector } from "./vector.js";
 
 const reusableEuler1 = new THREE.Euler();
@@ -90,29 +91,6 @@ export function areVectorsCollinear(v1, v2) {
 
 export function easeInOutSine(x) {
   return -(Math.cos(Math.PI * x) - 1) / 2;
-}
-
-/** @param {Mesh} mesh */
-export function computeVertexNeighborhood(mesh) {
-  const map = {};
-
-  for (const key in mesh.faces) {
-    const face = mesh.faces[key];
-
-    face.vertices.forEach((vkey) => {
-      if (!(vkey in map)) {
-        map[vkey] = [];
-      }
-
-      face.vertices.forEach((neighborkey) => {
-        if (neighborkey == vkey) return;
-
-        map[vkey].safePush(neighborkey);
-      });
-    });
-  }
-
-  return map;
 }
 
 export function getAdjacentElements(arr, index) {
@@ -465,7 +443,7 @@ function gatherConnectedVertices(
     );
   }
   if (!neighborhood) {
-    neighborhood = computeVertexNeighborhood(mesh);
+    neighborhood = Neighborhood.VertexFaces(mesh);
   }
 
   const connected = new Set([vertex]);
@@ -530,7 +508,7 @@ export function getSelectedEdgesConnectedCountMap(mesh) {
   const selectedConnectedCount = {};
   const connectedCount = {};
 
-  const neighborhood = computeEdgeFacesNeighborhood(mesh);
+  const neighborhood = Neighborhood.EdgeFaces(mesh);
 
   for (const [a, b] of edges) {
     const edgeKey = getEdgeKey(a, b);
@@ -548,27 +526,7 @@ export function getSelectedEdgesConnectedCountMap(mesh) {
   }
   return { connectedCount, selectedConnectedCount };
 }
-/**
- *
- * @param {Mesh} mesh
- * @returns {{[edgeKey: string]: MeshFace[]}}
- */
-export function computeEdgeFacesNeighborhood(mesh) {
-  const neighborhood = {};
-  for (const key in mesh.faces) {
-    const face = mesh.faces[key];
-    const vertices = face.getSortedVertices();
 
-    for (let i = 0; i < vertices.length; i++) {
-      const vertexCurr = vertices[i];
-      const vertexNext = vertices[(i + 1) % vertices.length];
-      const edgeKey = getEdgeKey(vertexCurr, vertexNext);
-      neighborhood[edgeKey] ??= [];
-      neighborhood[edgeKey].safePush(face);
-    }
-  }
-  return neighborhood;
-}
 /**
  * @param {Mesh} mesh
  */
@@ -590,7 +548,7 @@ export function groupLoopsIncluding(mesh, verticesSet) {
   return loops;
 }
 export function groupConnectedVerticesIncluding(mesh, verticesSet) {
-  const neighborhood = computeVertexNeighborhood(mesh);
+  const neighborhood = Neighborhood.VertexFaces(mesh);
   const processedVertices = new Set();
   const groups = [];
 
