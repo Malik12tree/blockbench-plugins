@@ -8,7 +8,7 @@ function runEdit(amend = false, influence = 1, iterations = 1) {
     if (!influence || !iterations) return; //
 
     const { vertices } = mesh;
-    const neighborMap = Neighborhood.VertexFaces(mesh);
+    const neighborMap = Neighborhood.VertexVertices(mesh);
 
     const selectedVertices = mesh.getSelectedVertices();
 

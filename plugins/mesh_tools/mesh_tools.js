@@ -1,6 +1,17 @@
 (function () {
   'use strict';
 
+  var bevel = {
+  	docs: {
+  		"private": true
+  	},
+  	name: "Bevel",
+  	icon: "rounded_corner",
+  	description: "Chamfers selected edges",
+  	selection_mode: [
+  		"edge"
+  	]
+  };
   var laplacian_smooth = {
   	docs: {
   		lines: [
@@ -493,6 +504,7 @@
   	description: "Generate a Torus Knot with fully customized settings."
   };
   var _ACTIONS = {
+  	bevel: bevel,
   	laplacian_smooth: laplacian_smooth,
   	to_sphere: to_sphere,
   	bridge_edge_loops: bridge_edge_loops,
@@ -677,13 +689,85 @@
     return new Action(qualifyName(id), options);
   }
 
+  /**
+   * @template {V}
+   * @template {K}
+   * @param {V[]} arr
+   * @param {(value: V, currentIndex: number, array: V[]) => K[]} callback
+   * @returns {{[k: K]: V[]}}
+   */
+
+  function minIndex(array) {
+    let minI = -1;
+    let minValue = Infinity;
+    for (let i = 0; i < array.length; i++) {
+      const value = array[i];
+
+      if (value <= minValue) {
+        minValue = value;
+        minI = i;
+      }
+    }
+    return minI;
+  }
+  function findMin(array, map = (x) => x) {
+    let minElement = null;
+    let minValue = Infinity;
+
+    for (const element of array) {
+      const value = map(element);
+
+      if (value <= minValue) {
+        minElement = element;
+        minValue = value;
+      }
+    }
+
+    return minElement;
+  }
+
+  /**
+   *
+   * @param {ArrayVector3} a
+   * @param {ArrayVector3} b
+   * @param {number} t
+   * @returns {ArrayVector3}
+   */
+  function lerp3(a, b, t) {
+    return a.map((e, i) => Math.lerp(e, b[i], t));
+  }
+  function groupElementsCollided(array, every = 2) {
+    const newArray = [];
+    for (let i = 0; i < array.length; i++) {
+      const sub = [];
+      for (let j = 0; j < every; j++) {
+        const element = array[(i + j) % array.length];
+        sub.push(element);
+      }
+      newArray.push(sub);
+    }
+    return newArray;
+  }
+
+  function offsetArray(array, offset) {
+    while (offset < 0) offset += array.length;
+    while (offset >= array.length) offset -= array.length;
+
+    const newArr = [];
+    for (let i = 0; i < array.length; i++) {
+      newArr[(i + offset) % array.length] = array[i];
+    }
+
+    array.splice(0, Infinity, ...newArr);
+  }
+
   class Neighborhood {
     /**
      *
      * @param {Mesh} mesh
-     * @returns
+     * @returns {{[vertexKey: string]: string[]}}
      */
-    static VertexFaces(mesh) {
+    static VertexVertices(mesh) {
       const map = {};
 
       for (const key in mesh.faces) {
@@ -708,6 +792,26 @@
     /**
      *
      * @param {Mesh} mesh
+     * @returns {{[vertexKey: string]: MeshFace[]}}
+     */
+    static VertexFaces(mesh) {
+      const neighborhood = {};
+
+      for (const key in mesh.faces) {
+        const face = mesh.faces[key];
+
+        for (const vertexKey of face.vertices) {
+          neighborhood[vertexKey] ??= [];
+          neighborhood[vertexKey].safePush(face);
+        }
+      }
+
+      return neighborhood;
+    }
+
+    /**
+     *
+     * @param {Mesh} mesh
      * @returns {{[edgeKey: string]: MeshFace[]}}
      */
     static EdgeFaces(mesh) {
@@ -726,7 +830,30 @@
       }
       return neighborhood;
     }
-    static VertexEdges() {}
+
+    /**
+     *
+     * @param {Mesh} mesh
+     * @returns {{[vertexKey: string]: string[]}}
+     */
+    static VertexEdges(mesh) {
+      const neighborhood = {};
+      for (const key in mesh.faces) {
+        const face = mesh.faces[key];
+        const vertices = face.getSortedVertices();
+
+        for (let i = 0; i < vertices.length; i++) {
+          const vertexCurr = vertices[i];
+          const vertexNext = vertices[(i + 1) % vertices.length];
+          const edgeKey = getEdgeKey(vertexCurr, vertexNext);
+          neighborhood[vertexCurr] ??= [];
+          neighborhood[vertexNext] ??= [];
+          neighborhood[vertexCurr].safePush(edgeKey);
+          neighborhood[vertexNext].safePush(edgeKey);
+        }
+      }
+      return neighborhood;
+    }
   }
 
   function xKey(obj) {
@@ -988,8 +1115,7 @@
    * Triangulates a polygon into a set of triangles.
    *
    * @param {ArrayVector3[]} polygon
-   * @returns {Array<ArrayVector3>} An array of triangles. Each triangle is represented
-   *   as an ArrayVector3
+   * @returns {Array<ArrayVector3>} An array of triangles.
    */
   function triangulate(polygon) {
     const vertices3d = polygon.map((v) => v.V3_toThree());
@@ -1077,20 +1203,6 @@
       .split(/[_\s]+/g)
       .map((word) => word[0].toUpperCase() + word.slice(1))
       .join(" ");
-  }
-
-  function minIndex(array) {
-    let minI = -1;
-    let minValue = Infinity;
-    for (let i = 0; i < array.length; i++) {
-      const value = array[i];
-
-      if (value <= minValue) {
-        minValue = value;
-        minI = i;
-      }
-    }
-    return minI;
   }
   /**
    *
@@ -1205,6 +1317,11 @@
     }
     return `${a}_${b}`;
   }
+  /**
+   *
+   * @param {string} edgeKey
+   * @returns {[string, string]}
+   */
   function extractEdgeKey(edgeKey) {
     return edgeKey.split("_");
   }
@@ -1235,45 +1352,6 @@
     return { connectedCount, selectedConnectedCount };
   }
 
-  /**
-   *
-   * @param {ArrayVector3} a
-   * @param {ArrayVector3} b
-   * @param {number} t
-   * @returns {ArrayVector3}
-   */
-  function lerp3(a, b, t) {
-    return a.map((e, i) => Math.lerp(e, b[i], t));
-  }
-
-  function groupElementsCollided(array, every = 2) {
-    const newArray = [];
-    for (let i = 0; i < array.length; i++) {
-      const sub = [];
-      for (let j = 0; j < every; j++) {
-        const element = array[(i + j) % array.length];
-        sub.push(element);
-      }
-      newArray.push(sub);
-    }
-    return newArray;
-  }
-
-  function findMin(array, map = (x) => x) {
-    let minElement = null;
-    let minValue = Infinity;
-
-    for (const element of array) {
-      const value = map(element);
-
-      if (value <= minValue) {
-        minElement = element;
-        minValue = value;
-      }
-    }
-
-    return minElement;
-  }
   function computeCentroid(polygon) {
     const centroid = new THREE.Vector3();
     for (const vertex of polygon) {
@@ -1283,17 +1361,6 @@
     return centroid;
   }
 
-  function offsetArray(array, offset) {
-    while (offset < 0) offset += array.length;
-    while (offset >= array.length) offset -= array.length;
-
-    const newArr = [];
-    for (let i = 0; i < array.length; i++) {
-      newArr[(i + offset) % array.length] = array[i];
-    }
-
-    array.splice(0, Infinity, ...newArr);
-  }
 
   /**
    *
@@ -1342,16 +1409,6 @@
       3 * (1 - t) * t ** 2 * p2 +
       t ** 3 * p3
     );
-  }
-  /**
-   *
-   * @param {string} message
-   * @param {?number} timeout
-   * @returns {never}
-   */
-  function throwQuickMessage(message, timeout) {
-    Blockbench.showQuickMessage(message, timeout);
-    throw message;
   }
 
   /**
@@ -1602,7 +1659,7 @@
     twist,
     cutHoles,
     blendPath,
-    blendInfluence,
+    blendInfluence
   ) {
     Undo.initEdit({ elements: Mesh.selected, selection: true }, amend);
 
@@ -1783,7 +1840,7 @@
           form.twist,
           form.cut_holes,
           form.blend_path,
-          form.blend_influence / 100,
+          form.blend_influence / 100
         );
       }
     );
@@ -1834,7 +1891,7 @@
 
   action("expand_selection", () => {
     Mesh.selected.forEach((mesh) => {
-      const neighborMap = Neighborhood.VertexFaces(mesh);
+      const neighborMap = Neighborhood.VertexVertices(mesh);
 
       const selectedVertices = mesh.getSelectedVertices();
       const selectedVertexSet = new Set(selectedVertices);
@@ -1858,7 +1915,7 @@
       if (!influence || !iterations) return; //
 
       const { vertices } = mesh;
-      const neighborMap = Neighborhood.VertexFaces(mesh);
+      const neighborMap = Neighborhood.VertexVertices(mesh);
 
       const selectedVertices = mesh.getSelectedVertices();
 
@@ -1965,7 +2022,7 @@
 
   action("shrink_selection", () => {
     Mesh.selected.forEach((mesh) => {
-      const neighborMap = Neighborhood.VertexFaces(mesh);
+      const neighborMap = Neighborhood.VertexVertices(mesh);
 
       const selectedVertices = mesh.getSelectedVertices();
       const selectedVertexSet = new Set(selectedVertices);
@@ -2551,6 +2608,17 @@
       }
     );
     messageBox.object.querySelector(".dialog_content").style.overflow = "auto";
+  }
+
+  /**
+   *
+   * @param {string} message
+   * @param {?number} timeout
+   * @returns {never}
+   */
+  function throwQuickMessage(message, timeout) {
+    Blockbench.showQuickMessage(message, timeout);
+    throw message;
   }
 
   const reusableEuler1 = new THREE.Euler();
@@ -20123,7 +20191,7 @@
         }
       }
       for (const char of out.text) {
-        if (!(char in content.glyphs)) {
+        if (char != '\n' && !(char in content.glyphs)) {
           throwQuickMessage(
             `Character "${char}" doesn't exist on the provided font!`,
             2000

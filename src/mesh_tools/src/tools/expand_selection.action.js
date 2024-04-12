@@ -4,7 +4,7 @@ import { selectFacesAndEdgesByVertices } from "../utils/utils.js";
 
 export default action("expand_selection", () => {
   Mesh.selected.forEach((mesh) => {
-    const neighborMap = Neighborhood.VertexFaces(mesh);
+    const neighborMap = Neighborhood.VertexVertices(mesh);
 
     const selectedVertices = mesh.getSelectedVertices();
     const selectedVertexSet = new Set(selectedVertices);

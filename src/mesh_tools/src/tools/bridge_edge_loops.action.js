@@ -7,18 +7,15 @@
  */
 
 import { action } from "../actions.js";
+import { findMin, groupElementsCollided, lerp3, offsetArray } from "../utils/array.js";
 import {
   CubicBezier as CB,
   closestToLine,
   computeCentroid,
   computeTriangleNormal,
   extractEdgeKey,
-  findMin,
   getSelectedEdgesConnectedCountMap,
   getSelectedFacesAndEdgesByVertices,
-  groupElementsCollided,
-  lerp3,
-  offsetArray,
   selectFacesAndEdgesByVertices,
 } from "../utils/utils.js";
 import {
@@ -267,7 +264,7 @@ function runEdit(
   twist,
   cutHoles,
   blendPath,
-  blendInfluence,
+  blendInfluence
 ) {
   Undo.initEdit({ elements: Mesh.selected, selection: true }, amend);
 
@@ -448,7 +445,7 @@ export default action("bridge_edge_loops", () => {
         form.twist,
         form.cut_holes,
         form.blend_path,
-        form.blend_influence / 100,
+        form.blend_influence / 100
       );
     }
   );

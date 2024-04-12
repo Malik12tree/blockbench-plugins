@@ -17,6 +17,7 @@ export default {
     for (const id in ACTIONS) {
       const action = ACTIONS[id];
       action.id = id;
+      if (ACTIONS[id]?.docs?.private) delete ACTIONS[id];
     }
 
     const tableOfContents = [];

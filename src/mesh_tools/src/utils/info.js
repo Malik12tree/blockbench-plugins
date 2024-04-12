@@ -24,3 +24,14 @@ export function dontShowAgainInfo(id, title, message) {
   );
   messageBox.object.querySelector(".dialog_content").style.overflow = "auto";
 }
+
+/**
+ *
+ * @param {string} message
+ * @param {?number} timeout
+ * @returns {never}
+ */
+export function throwQuickMessage(message, timeout) {
+  Blockbench.showQuickMessage(message, timeout);
+  throw message;
+}
