@@ -711,6 +711,9 @@
     return minI;
   }
   function findMin(array, map = (x) => x) {
+    if (array.length == 1) return array[0];
+    if (array.length == 0) return null;
+
     let minElement = null;
     let minValue = Infinity;
 
@@ -1508,7 +1511,7 @@
     edgeLoopB,
     centroidA,
     centroidB,
-    { twist, numberOfCuts, blendPath, blendInfluence }
+    { twist, numberOfCuts, blendPath, blendInfluence, reverse }
   ) {
     if (edgeLoopA.length < 3 || edgeLoopB.length < 3) {
       return;
@@ -1516,24 +1519,20 @@
     edgeLoopA = edgeLoopA.map((e) => e.slice());
     edgeLoopB = edgeLoopB.map((e) => e.slice());
 
-    const bestOffset = bestEdgeLoopsOffset(edgeLoopB, edgeLoopA, mesh);
+    const bestOffset = bestEdgeLoopsOffset(edgeLoopA, edgeLoopB, mesh);
     offsetArray(edgeLoopB, bestOffset);
 
     const reversedEdgeLoopB = edgeLoopB.map((e) => e.slice().reverse()).reverse();
 
     const bestOffsetReversed = bestEdgeLoopsOffset(
-      reversedEdgeLoopB,
       edgeLoopA,
+      reversedEdgeLoopB,
       mesh
     );
-    // Negation of `bestOffset2` since the array is reversed,
-    // Does it make ANY sense?
-    // It doesn't!
-    // It just happens to work.
-    offsetArray(reversedEdgeLoopB, -bestOffsetReversed);
+    offsetArray(reversedEdgeLoopB, bestOffsetReversed);
     if (
-      edgeLoopsLength(mesh, edgeLoopA, edgeLoopB) >
-      edgeLoopsLength(mesh, edgeLoopA, reversedEdgeLoopB)
+      edgeLoopsLength(mesh, edgeLoopA, reverse ? edgeLoopB : reversedEdgeLoopB) <
+      edgeLoopsLength(mesh, edgeLoopA, reverse ? reversedEdgeLoopB : edgeLoopB)
     ) {
       edgeLoopB = reversedEdgeLoopB;
     }
@@ -1659,7 +1658,8 @@
     twist,
     cutHoles,
     blendPath,
-    blendInfluence
+    blendInfluence,
+    reverse
   ) {
     Undo.initEdit({ elements: Mesh.selected, selection: true }, amend);
 
@@ -1762,7 +1762,11 @@
         };
       }
 
-      const sortedEdgeLoops = [loops.pop()];
+      const furthestLoop = findMin(loops, e => e.centroid.length());
+      loops.remove(furthestLoop);
+
+      const sortedEdgeLoops = [furthestLoop];
+      mesh.addVertices(sortedEdgeLoops[0].centroid.toArray());
       while (loops.length) {
         const currEdgeLoop = sortedEdgeLoops.last();
         const closestLoop = findMin(loops, (e) =>
@@ -1788,6 +1792,7 @@
             numberOfCuts,
             blendPath,
             blendInfluence,
+            reverse
           }
         );
       }
@@ -1799,15 +1804,15 @@
     Undo.finishEdit("MTools: Bridged Edge Loops.");
   }
   action("bridge_edge_loops", () => {
-    runEdit$c(false, 2, 0, true, true, 1);
+    runEdit$c(false, 2, 0, true, true, 1, false);
 
     Undo.amendEdit(
       {
-        blend_path: {
-          type: "checkbox",
-          label: "Blend Path",
-          value: true,
-        },
+        // reverse: {
+        //   type: "checkbox",
+        //   label: "Reverse Winding",
+        //   value: false,
+        // },
         blend_influence: {
           type: "number",
           label: "Smoothness",
@@ -1826,6 +1831,11 @@
           label: "Twist",
           value: 0,
         },
+        blend_path: {
+          type: "checkbox",
+          label: "Blend Path",
+          value: true,
+        },
         cut_holes: {
           type: "checkbox",
           label: "Cut Holes",
@@ -1840,7 +1850,8 @@
           form.twist,
           form.cut_holes,
           form.blend_path,
-          form.blend_influence / 100
+          form.blend_influence / 100,
+          form.reverse
         );
       }
     );

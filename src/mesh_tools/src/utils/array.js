@@ -30,6 +30,9 @@ export function minIndex(array) {
   return minI;
 }
 export function findMin(array, map = (x) => x) {
+  if (array.length == 1) return array[0];
+  if (array.length == 0) return null;
+
   let minElement = null;
   let minValue = Infinity;
 
