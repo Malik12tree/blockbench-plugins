@@ -1,4 +1,5 @@
 import { action } from "../actions.js";
+<<<<<<< HEAD
 import { renderLine } from "../utils/docs.js";
 import { dontShowAgainInfo } from "../utils/info.js";
 import {
@@ -36,6 +37,14 @@ function runEdit(
 
   Undo.initEdit({ outliner: true, elements: [], selection: true }, amend);
 
+=======
+import { computeTriangleNormal, rotationFromDirection } from "../utils/utils.js";
+
+const reusableEuler1 = new THREE.Euler();
+function runEdit(mesh,selected, group, density, amend = false) {
+  const meshes = [];
+  Undo.initEdit({ elements: meshes, selection: true, group }, amend);
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
   /**
    * @type {THREE.Mesh}
    */
@@ -45,20 +54,34 @@ function runEdit(
   const vertices = tmesh.geometry.getAttribute("position");
   const l = faces.count;
 
+<<<<<<< HEAD
   const points = [];
   for (let d = 0; d < density; d++) {
     const i = Math.floor((Math.random() * l) / 3) * 3; // random face index
     const t0 = reusableVec1.set(
+=======
+  for (let d = 0; d < density; d++) {
+    const i = Math.floor((Math.random() * l) / 3) * 3; // random face index
+    const t0 = new THREE.Vector3(
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
       vertices.getX(faces.getX(i)),
       vertices.getY(faces.getX(i)),
       vertices.getZ(faces.getX(i))
     );
+<<<<<<< HEAD
     const t1 = reusableVec2.set(
+=======
+    const t1 = new THREE.Vector3(
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
       vertices.getX(faces.getY(i)),
       vertices.getY(faces.getY(i)),
       vertices.getZ(faces.getY(i))
     );
+<<<<<<< HEAD
     const t2 = reusableVec3.set(
+=======
+    const t2 = new THREE.Vector3(
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
       vertices.getX(faces.getZ(i)),
       vertices.getY(faces.getZ(i)),
       vertices.getZ(faces.getZ(i))
@@ -69,14 +92,21 @@ function runEdit(
     tmesh.localToWorld(t2);
 
     // f*ed up midpoint theroem
+<<<<<<< HEAD
     const pointA = reusableVec4.lerpVectors(t0, t1, Math.random());
     const pointB = reusableVec5.lerpVectors(t0, t2, Math.random());
 
     const point = new THREE.Vector3().lerpVectors(
+=======
+    const pointA = new THREE.Vector3().lerpVectors(t0, t1, Math.random());
+    const pointB = new THREE.Vector3().lerpVectors(t0, t2, Math.random());
+    const pointF = new THREE.Vector3().lerpVectors(
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
       pointA,
       pointB,
       Math.random()
     );
+<<<<<<< HEAD
     if (points.find((e) => e.distanceToSquared(point) < minDistanceSquared)) {
       continue;
     }
@@ -85,11 +115,16 @@ function runEdit(
     /**
      * @type {Mesh}
      */
+=======
+
+    // scatter on points
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
     const otherMesh =
       selected[Math.floor(selected.length * Math.random())].duplicate();
 
     otherMesh.removeFromParent();
     otherMesh.parent = "root";
+<<<<<<< HEAD
 
     const currentScale = Math.lerp(
       scale,
@@ -129,12 +164,31 @@ function runEdit(
     selection: true,
   });
   Canvas.updateAll();
+=======
+    Outliner.root.push(otherMesh);
+
+    const normal = computeTriangleNormal(t0, t1, t2);
+
+    const rotation = rotationFromDirection(normal, reusableEuler1);
+    otherMesh.rotation[0] = Math.radToDeg(rotation.x);
+    otherMesh.rotation[1] = Math.radToDeg(rotation.y);
+    otherMesh.rotation[2] = Math.radToDeg(rotation.z);
+
+    otherMesh.origin = pointF.toArray();
+
+    otherMesh.addTo(group);
+    meshes.push(otherMesh);
+  }
+  Undo.finishEdit("MTools: Scatter meshes");
+  Canvas.updatePositions();
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
 }
 export default action("scatter", function () {
   if (Mesh.selected.length < 2) {
     Blockbench.showQuickMessage("At least two meshes must be selected");
     return;
   }
+<<<<<<< HEAD
   dontShowAgainInfo(
     "scatter_pivot",
     "Good To Know",
@@ -158,18 +212,29 @@ export default action("scatter", function () {
       }),
     ].join("\n")
   );
+=======
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
 
   const mesh = Mesh.selected.last();
   mesh.unselect();
 
+<<<<<<< HEAD
   const selected = Mesh.selected.slice();
   runEdit(mesh, selected, {});
+=======
+  const group = new Group({ name: "instances_on_" + mesh.name });
+  group.init();
+
+  const selected = Mesh.selected.slice();
+  runEdit(mesh, selected, group, 3);
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
 
   Undo.amendEdit(
     {
       density: {
         type: "number",
         value: 3,
+<<<<<<< HEAD
         label: "Max Density",
         min: 0,
         max: 100,
@@ -213,12 +278,19 @@ export default action("scatter", function () {
         type: "number",
         value: 0,
         label: "Rotation Randomness",
+=======
+        label: "Density",
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
         min: 0,
         max: 100,
       },
     },
     (form) => {
+<<<<<<< HEAD
       runEdit(mesh, selected, form, true);
+=======
+      runEdit(mesh, selected, group, form.density, true);
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
     }
   );
 });

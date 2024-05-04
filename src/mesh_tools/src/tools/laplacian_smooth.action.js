@@ -1,5 +1,9 @@
 import { action } from "../actions.js";
+<<<<<<< HEAD
 import Neighborhood from "../utils/mesh/neighborhood.js";
+=======
+import { computeVertexNeighborhood } from "../utils/utils.js";
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
 
 function runEdit(amend = false, influence = 1, iterations = 1) {
   Undo.initEdit({ elements: Mesh.selected, selection: true }, amend);
@@ -8,7 +12,11 @@ function runEdit(amend = false, influence = 1, iterations = 1) {
     if (!influence || !iterations) return; //
 
     const { vertices } = mesh;
+<<<<<<< HEAD
     const neighborMap = Neighborhood.VertexVertices(mesh);
+=======
+    const neighborMap = computeVertexNeighborhood(mesh);
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
 
     const selectedVertices = mesh.getSelectedVertices();
 

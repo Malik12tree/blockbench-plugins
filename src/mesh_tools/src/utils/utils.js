@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 import { groupElementsCollided } from "./array.js";
 import Neighborhood from "./mesh/neighborhood.js";
+=======
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
 import { addVectors, getX, getY, getZ, isZeroVector } from "./vector.js";
 
 const reusableEuler1 = new THREE.Euler();
@@ -23,6 +26,7 @@ for (let x = 0; x < 256; x++) gradient256[[x, 0]] = x / 255;
  */
 const reusableObject = new THREE.Object3D();
 reusableObject.rotation.order = "XYZ";
+<<<<<<< HEAD
 export function rotationFromDirection(
   target,
   targetEuler = new THREE.Euler(),
@@ -33,6 +37,11 @@ export function rotationFromDirection(
   reusableObject.rotateX(rotateX);
   reusableObject.rotateY(rotateY);
   reusableObject.rotateZ(rotateZ);
+=======
+export function rotationFromDirection(target, targetEuler = new THREE.Euler()) {
+  reusableObject.lookAt(target);
+  reusableObject.rotateX(Math.degToRad(90));
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
 
   targetEuler.copy(reusableObject.rotation);
   return targetEuler;
@@ -94,6 +103,32 @@ export function easeInOutSine(x) {
   return -(Math.cos(Math.PI * x) - 1) / 2;
 }
 
+<<<<<<< HEAD
+=======
+/** @param {Mesh} mesh */
+export function computeVertexNeighborhood(mesh) {
+  const map = {};
+
+  for (const key in mesh.faces) {
+    const face = mesh.faces[key];
+
+    face.vertices.forEach((vkey) => {
+      if (!(vkey in map)) {
+        map[vkey] = [];
+      }
+
+      face.vertices.forEach((neighborkey) => {
+        if (neighborkey == vkey) return;
+
+        map[vkey].safePush(neighborkey);
+      });
+    });
+  }
+
+  return map;
+}
+
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
 export function getAdjacentElements(arr, index) {
   return [
     arr[(index + 1 + arr.length) % arr.length],
@@ -219,7 +254,12 @@ export function projectOnPlane(polygonOrPoint, plane) {
  * Triangulates a polygon into a set of triangles.
  *
  * @param {ArrayVector3[]} polygon
+<<<<<<< HEAD
  * @returns {Array<ArrayVector3>} An array of triangles.
+=======
+ * @returns {Array<ArrayVector3>} An array of triangles. Each triangle is represented
+ *   as an ArrayVector3
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
  */
 export function triangulate(polygon) {
   const vertices3d = polygon.map((v) => v.V3_toThree());
@@ -267,6 +307,7 @@ export function triangulate(polygon) {
 
   return triangles;
 }
+<<<<<<< HEAD
 /**
  * @template T
  * @param {[T, T, T]} triangleA
@@ -328,6 +369,8 @@ export function quadrilate(polygon) {
 
   return quadrilaterals;
 }
+=======
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
 
 export function worldToScreen(p, camera, width, height) {
   // https://stackoverflow.com/a/27448966/16079500
@@ -369,6 +412,23 @@ export function snakeToPascal(subject) {
     .map((word) => word[0].toUpperCase() + word.slice(1))
     .join(" ");
 }
+<<<<<<< HEAD
+=======
+
+export function minIndex(array) {
+  let minI = -1;
+  let minValue = Infinity;
+  for (let i = 0; i < array.length; i++) {
+    const value = array[i];
+
+    if (value <= minValue) {
+      minValue = value;
+      minI = i;
+    }
+  }
+  return minI;
+}
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
 /**
  *
  * @param {ArrayVector3[]} points
@@ -490,7 +550,11 @@ function gatherConnectedVertices(
     );
   }
   if (!neighborhood) {
+<<<<<<< HEAD
     neighborhood = Neighborhood.VertexVertices(mesh);
+=======
+    neighborhood = computeVertexNeighborhood(mesh);
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
   }
 
   const connected = new Set([vertex]);
@@ -511,7 +575,11 @@ function gatherConnectedVertices(
   }
   return connected;
 }
+<<<<<<< HEAD
 export function sortVerticesByAngle(mesh, vertexKeys) {
+=======
+function sortVerticesByAngle(mesh, vertexKeys) {
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
   const vertices = vertexKeys.map((e) => mesh.vertices[e].V3_toThree());
   const vertices2d = projectIntoOwnPlane(vertices);
 
@@ -544,6 +612,7 @@ export function getEdgeKey(a, b) {
   }
   return `${a}_${b}`;
 }
+<<<<<<< HEAD
 export function sortEdgeVertices(arr) {
   return arr.sort();
 }
@@ -557,6 +626,8 @@ export function isEdgeKeySelected(mesh, edge) {
  * @param {string} edgeKey
  * @returns {[string, string]}
  */
+=======
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
 export function extractEdgeKey(edgeKey) {
   return edgeKey.split("_");
 }
@@ -568,7 +639,11 @@ export function getSelectedEdgesConnectedCountMap(mesh) {
   const selectedConnectedCount = {};
   const connectedCount = {};
 
+<<<<<<< HEAD
   const neighborhood = Neighborhood.EdgeFaces(mesh);
+=======
+  const neighborhood = computeEdgeFacesNeighborhood(mesh);
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
 
   for (const [a, b] of edges) {
     const edgeKey = getEdgeKey(a, b);
@@ -586,7 +661,31 @@ export function getSelectedEdgesConnectedCountMap(mesh) {
   }
   return { connectedCount, selectedConnectedCount };
 }
+<<<<<<< HEAD
 
+=======
+/**
+ *
+ * @param {Mesh} mesh
+ * @returns {{[edgeKey: string]: MeshFace[]}}
+ */
+export function computeEdgeFacesNeighborhood(mesh) {
+  const neighborhood = {};
+  for (const key in mesh.faces) {
+    const face = mesh.faces[key];
+    const vertices = face.getSortedVertices();
+
+    for (let i = 0; i < vertices.length; i++) {
+      const vertexCurr = vertices[i];
+      const vertexNext = vertices[(i + 1) % vertices.length];
+      const edgeKey = getEdgeKey(vertexCurr, vertexNext);
+      neighborhood[edgeKey] ??= [];
+      neighborhood[edgeKey].safePush(face);
+    }
+  }
+  return neighborhood;
+}
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
 /**
  * @param {Mesh} mesh
  */
@@ -608,7 +707,11 @@ export function groupLoopsIncluding(mesh, verticesSet) {
   return loops;
 }
 export function groupConnectedVerticesIncluding(mesh, verticesSet) {
+<<<<<<< HEAD
   const neighborhood = Neighborhood.VertexVertices(mesh);
+=======
+  const neighborhood = computeVertexNeighborhood(mesh);
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
   const processedVertices = new Set();
   const groups = [];
 
@@ -693,6 +796,48 @@ export function vertexNormal(mesh, vertexKey) {
   return avgNormal;
 }
 
+<<<<<<< HEAD
+=======
+/**
+ *
+ * @param {ArrayVector3} a
+ * @param {ArrayVector3} b
+ * @param {number} t
+ * @returns {ArrayVector3}
+ */
+export function lerp3(a, b, t) {
+  return a.map((e, i) => Math.lerp(e, b[i], t));
+}
+
+export function groupElementsCollided(array, every = 2) {
+  const newArray = [];
+  for (let i = 0; i < array.length; i++) {
+    const sub = [];
+    for (let j = 0; j < every; j++) {
+      const element = array[(i + j) % array.length];
+      sub.push(element);
+    }
+    newArray.push(sub);
+  }
+  return newArray;
+}
+
+export function findMin(array, map = (x) => x) {
+  let minElement = null;
+  let minValue = Infinity;
+
+  for (const element of array) {
+    const value = map(element);
+
+    if (value <= minValue) {
+      minElement = element;
+      minValue = value;
+    }
+  }
+
+  return minElement;
+}
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
 export function computeCentroid(polygon) {
   const centroid = new THREE.Vector3();
   for (const vertex of polygon) {
@@ -702,6 +847,20 @@ export function computeCentroid(polygon) {
   return centroid;
 }
 
+<<<<<<< HEAD
+=======
+export function offsetArray(array, offset) {
+  while (offset < 0) offset += array.length;
+  while (offset >= array.length) offset -= array.length;
+
+  const newArr = [];
+  for (let i = 0; i < array.length; i++) {
+    newArr[(i + offset) % array.length] = array[i];
+  }
+
+  array.splice(0, Infinity, ...newArr);
+}
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
 
 /**
  *
@@ -759,4 +918,18 @@ export function CubicBezierTangent(t, p0, p1, p2, p3) {
     6 * (1 - t) * t * (p2 - p1) +
     3 * t ** 2 * (p3 - p2)
   );
+<<<<<<< HEAD
 }
+=======
+}
+/**
+ * 
+ * @param {string} message 
+ * @param {?number} timeout 
+ * @returns {never}
+ */
+export function throwQuickMessage(message, timeout) {
+  Blockbench.showQuickMessage(message, timeout);
+  throw message;
+}
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80

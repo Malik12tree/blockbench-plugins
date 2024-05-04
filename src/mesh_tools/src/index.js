@@ -3,13 +3,17 @@ import "./operators/index.js";
 import "./generators/index.js";
 import { ACTIONS, qualifyName } from "./actions.js";
 import { createTextMesh, vertexNormal } from "./utils/utils.js";
+<<<<<<< HEAD
 import { PLUGIN_ID } from "./globals.js";
+=======
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
 
 const deletables = [];
 /**
  * @type {Array<THREE.Object3D>}
  */
 const meshToolTips = [];
+<<<<<<< HEAD
 BBPlugin.register(PLUGIN_ID, {
   new_repository_format: true,
   title: "MTools",
@@ -20,6 +24,18 @@ BBPlugin.register(PLUGIN_ID, {
   min_version: "4.9.4",
   variant: "both",
   tags: ["Format: Generic Model", "Mesh", "Tool"],
+=======
+BBPlugin.register("mesh_tools", {
+  "new_repository_format": true,
+  "title": "MTools",
+  "author": "Malik12tree",
+  "icon": "icon.png",
+  "description": "Adds powerful mesh modeling tools, operators and generators!",
+  "version": "2.0.0",
+  "min_version": "4.9.4",
+  "variant": "both",
+  "tags": ["Format: Generic Model", "Mesh", "Tool"],
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
   onload() {
     function debug(element) {
       for (const object of meshToolTips) {
@@ -41,6 +57,10 @@ BBPlugin.register(PLUGIN_ID, {
 
         mesh.position.copy(center);
         if (normal) {
+<<<<<<< HEAD
+=======
+
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
           mesh.position.add(normal.multiplyScalar(0.5));
         }
 
@@ -70,7 +90,11 @@ BBPlugin.register(PLUGIN_ID, {
     }
 
     // TODO move to separate plugin
+<<<<<<< HEAD
     const isDebug = false && this.source == "file";
+=======
+    const isDebug =false && this.source == "file";
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
     if (isDebug) {
       deletables.push(
         Mesh.prototype.preview_controller.on("update_geometry", ({ element }) =>
@@ -82,9 +106,15 @@ BBPlugin.register(PLUGIN_ID, {
       }
     }
 
+<<<<<<< HEAD
     Mesh.prototype.menu.structure.unshift(qualifyName("tools"));
     Mesh.prototype.menu.structure.unshift(qualifyName("operators"));
     MenuBar.addAction(qualifyName("generators"), "filter");
+=======
+    Mesh.prototype.menu.structure.unshift("@meshtools/tools");
+    Mesh.prototype.menu.structure.unshift("@meshtools/operators");
+    MenuBar.addAction("@meshtools/generators", "filter");
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
   },
   onunload() {
     for (const deletable of deletables) {

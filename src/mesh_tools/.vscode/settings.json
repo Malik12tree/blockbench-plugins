@@ -1,9 +1,13 @@
 {
 	"cSpell.words": [
+<<<<<<< HEAD
 		"dont",
 		"perlin",
 		"quadrilate",
 		"Quadrilates"
+=======
+		"perlin"
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
 	],
 	"files.autoSave": "onWindowChange"
 }

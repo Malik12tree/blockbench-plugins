@@ -1,6 +1,7 @@
 (function () {
   'use strict';
 
+<<<<<<< HEAD
   var bevel = {
   	docs: {
   		"private": true
@@ -12,6 +13,8 @@
   		"edge"
   	]
   };
+=======
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
   var laplacian_smooth = {
   	docs: {
   		lines: [
@@ -504,7 +507,10 @@
   	description: "Generate a Torus Knot with fully customized settings."
   };
   var _ACTIONS = {
+<<<<<<< HEAD
   	bevel: bevel,
+=======
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
   	laplacian_smooth: laplacian_smooth,
   	to_sphere: to_sphere,
   	bridge_edge_loops: bridge_edge_loops,
@@ -532,6 +538,7 @@
   	torusknot: torusknot
   };
 
+<<<<<<< HEAD
   const KEYS_KEY = "<keys>";
   class BasicQualifiedStorage {
     constructor(id) {
@@ -633,6 +640,8 @@
   const PLUGIN_ID = "mesh_tools";
   const storage = new QualifiedStorage(PLUGIN_ID);
 
+=======
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
   const ACTIONS = _ACTIONS;
 
   const CONDITIONS = {
@@ -655,7 +664,11 @@
   };
 
 
+<<<<<<< HEAD
   const qualifyName = (id) => (id == "_" ? id : `@${PLUGIN_ID}/${id}`);
+=======
+  const qualifyName = (id) => (id == "_" ? id : `@meshtools/${id}`);
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
 
   /**
    *
@@ -689,6 +702,7 @@
     return new Action(qualifyName(id), options);
   }
 
+<<<<<<< HEAD
   /**
    * @template {V}
    * @template {K}
@@ -859,6 +873,8 @@
     }
   }
 
+=======
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
   function xKey(obj) {
     if (obj instanceof THREE.Vector3 || obj instanceof THREE.Vector2) {
       return "x";
@@ -938,11 +954,19 @@
 
   const reusableEuler1$1 = new THREE.Euler();
   const reusableQuat1 = new THREE.Quaternion();
+<<<<<<< HEAD
   const reusableVec1$1 = new THREE.Vector3();
   const reusableVec2$1 = new THREE.Vector3();
   const reusableVec3$1 = new THREE.Vector3();
   const reusableVec4$1 = new THREE.Vector3();
   const reusableVec5$1 = new THREE.Vector3();
+=======
+  const reusableVec1 = new THREE.Vector3();
+  const reusableVec2 = new THREE.Vector3();
+  const reusableVec3 = new THREE.Vector3();
+  const reusableVec4 = new THREE.Vector3();
+  const reusableVec5 = new THREE.Vector3();
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
   new THREE.Vector2();
   new THREE.Vector2(1, 0);
 
@@ -957,6 +981,7 @@
    */
   const reusableObject = new THREE.Object3D();
   reusableObject.rotation.order = "XYZ";
+<<<<<<< HEAD
   function rotationFromDirection(
     target,
     targetEuler = new THREE.Euler(),
@@ -967,6 +992,11 @@
     reusableObject.rotateX(rotateX);
     reusableObject.rotateY(rotateY);
     reusableObject.rotateZ(rotateZ);
+=======
+  function rotationFromDirection(target, targetEuler = new THREE.Euler()) {
+    reusableObject.lookAt(target);
+    reusableObject.rotateX(Math.degToRad(90));
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
 
     targetEuler.copy(reusableObject.rotation);
     return targetEuler;
@@ -979,6 +1009,7 @@
    * @returns {THREE.Vector3}
    */
   function computeTriangleNormal(A, B, C) {
+<<<<<<< HEAD
     reusableVec1$1.set(getX(A), getY(A), getZ(A));
     reusableVec2$1.set(getX(B), getY(B), getZ(B));
     reusableVec3$1.set(getX(C), getY(C), getZ(C));
@@ -986,6 +1017,15 @@
       .crossVectors(
         reusableVec2$1.sub(reusableVec1$1),
         reusableVec3$1.sub(reusableVec1$1)
+=======
+    reusableVec1.set(getX(A), getY(A), getZ(A));
+    reusableVec2.set(getX(B), getY(B), getZ(B));
+    reusableVec3.set(getX(C), getY(C), getZ(C));
+    return reusableVec4
+      .crossVectors(
+        reusableVec2.sub(reusableVec1),
+        reusableVec3.sub(reusableVec1)
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
       )
       .clone();
   }
@@ -1013,6 +1053,32 @@
     return -(Math.cos(Math.PI * x) - 1) / 2;
   }
 
+<<<<<<< HEAD
+=======
+  /** @param {Mesh} mesh */
+  function computeVertexNeighborhood(mesh) {
+    const map = {};
+
+    for (const key in mesh.faces) {
+      const face = mesh.faces[key];
+
+      face.vertices.forEach((vkey) => {
+        if (!(vkey in map)) {
+          map[vkey] = [];
+        }
+
+        face.vertices.forEach((neighborkey) => {
+          if (neighborkey == vkey) return;
+
+          map[vkey].safePush(neighborkey);
+        });
+      });
+    }
+
+    return map;
+  }
+
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
   function getAdjacentElements(arr, index) {
     return [
       arr[(index + 1 + arr.length) % arr.length],
@@ -1104,6 +1170,7 @@
 
     if (polygonOrPoint instanceof Array) {
       return polygonOrPoint.map((e) => {
+<<<<<<< HEAD
         reusableVec5$1.copy(e);
         reusableVec5$1.applyQuaternion(quat);
         return new THREE.Vector2(reusableVec5$1.x, reusableVec5$1.z);
@@ -1112,13 +1179,28 @@
     reusableVec5$1.copy(polygonOrPoint);
     reusableVec5$1.applyQuaternion(quat);
     return new THREE.Vector2(reusableVec5$1.x, reusableVec5$1.z);
+=======
+        reusableVec5.copy(e);
+        reusableVec5.applyQuaternion(quat);
+        return new THREE.Vector2(reusableVec5.x, reusableVec5.z);
+      });
+    }
+    reusableVec5.copy(polygonOrPoint);
+    reusableVec5.applyQuaternion(quat);
+    return new THREE.Vector2(reusableVec5.x, reusableVec5.z);
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
   }
 
   /**
    * Triangulates a polygon into a set of triangles.
    *
    * @param {ArrayVector3[]} polygon
+<<<<<<< HEAD
    * @returns {Array<ArrayVector3>} An array of triangles.
+=======
+   * @returns {Array<ArrayVector3>} An array of triangles. Each triangle is represented
+   *   as an ArrayVector3
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
    */
   function triangulate(polygon) {
     const vertices3d = polygon.map((v) => v.V3_toThree());
@@ -1207,6 +1289,23 @@
       .map((word) => word[0].toUpperCase() + word.slice(1))
       .join(" ");
   }
+<<<<<<< HEAD
+=======
+
+  function minIndex(array) {
+    let minI = -1;
+    let minValue = Infinity;
+    for (let i = 0; i < array.length; i++) {
+      const value = array[i];
+
+      if (value <= minValue) {
+        minValue = value;
+        minI = i;
+      }
+    }
+    return minI;
+  }
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
   /**
    *
    * @param {ArrayVector3[]} points
@@ -1320,11 +1419,14 @@
     }
     return `${a}_${b}`;
   }
+<<<<<<< HEAD
   /**
    *
    * @param {string} edgeKey
    * @returns {[string, string]}
    */
+=======
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
   function extractEdgeKey(edgeKey) {
     return edgeKey.split("_");
   }
@@ -1336,7 +1438,11 @@
     const selectedConnectedCount = {};
     const connectedCount = {};
 
+<<<<<<< HEAD
     const neighborhood = Neighborhood.EdgeFaces(mesh);
+=======
+    const neighborhood = computeEdgeFacesNeighborhood(mesh);
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
 
     for (const [a, b] of edges) {
       const edgeKey = getEdgeKey(a, b);
@@ -1354,7 +1460,71 @@
     }
     return { connectedCount, selectedConnectedCount };
   }
+<<<<<<< HEAD
 
+=======
+  /**
+   *
+   * @param {Mesh} mesh
+   * @returns {{[edgeKey: string]: MeshFace[]}}
+   */
+  function computeEdgeFacesNeighborhood(mesh) {
+    const neighborhood = {};
+    for (const key in mesh.faces) {
+      const face = mesh.faces[key];
+      const vertices = face.getSortedVertices();
+
+      for (let i = 0; i < vertices.length; i++) {
+        const vertexCurr = vertices[i];
+        const vertexNext = vertices[(i + 1) % vertices.length];
+        const edgeKey = getEdgeKey(vertexCurr, vertexNext);
+        neighborhood[edgeKey] ??= [];
+        neighborhood[edgeKey].safePush(face);
+      }
+    }
+    return neighborhood;
+  }
+
+  /**
+   *
+   * @param {ArrayVector3} a
+   * @param {ArrayVector3} b
+   * @param {number} t
+   * @returns {ArrayVector3}
+   */
+  function lerp3(a, b, t) {
+    return a.map((e, i) => Math.lerp(e, b[i], t));
+  }
+
+  function groupElementsCollided(array, every = 2) {
+    const newArray = [];
+    for (let i = 0; i < array.length; i++) {
+      const sub = [];
+      for (let j = 0; j < every; j++) {
+        const element = array[(i + j) % array.length];
+        sub.push(element);
+      }
+      newArray.push(sub);
+    }
+    return newArray;
+  }
+
+  function findMin(array, map = (x) => x) {
+    let minElement = null;
+    let minValue = Infinity;
+
+    for (const element of array) {
+      const value = map(element);
+
+      if (value <= minValue) {
+        minElement = element;
+        minValue = value;
+      }
+    }
+
+    return minElement;
+  }
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
   function computeCentroid(polygon) {
     const centroid = new THREE.Vector3();
     for (const vertex of polygon) {
@@ -1364,6 +1534,20 @@
     return centroid;
   }
 
+<<<<<<< HEAD
+=======
+  function offsetArray(array, offset) {
+    while (offset < 0) offset += array.length;
+    while (offset >= array.length) offset -= array.length;
+
+    const newArr = [];
+    for (let i = 0; i < array.length; i++) {
+      newArr[(i + offset) % array.length] = array[i];
+    }
+
+    array.splice(0, Infinity, ...newArr);
+  }
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
 
   /**
    *
@@ -1413,6 +1597,19 @@
       t ** 3 * p3
     );
   }
+<<<<<<< HEAD
+=======
+  /**
+   * 
+   * @param {string} message 
+   * @param {?number} timeout 
+   * @returns {never}
+   */
+  function throwQuickMessage(message, timeout) {
+    Blockbench.showQuickMessage(message, timeout);
+    throw message;
+  }
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
 
   /**
    * !
@@ -1511,7 +1708,11 @@
     edgeLoopB,
     centroidA,
     centroidB,
+<<<<<<< HEAD
     { twist, numberOfCuts, blendPath, blendInfluence, reverse }
+=======
+    { twist, numberOfCuts, blendPath, blendInfluence }
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
   ) {
     if (edgeLoopA.length < 3 || edgeLoopB.length < 3) {
       return;
@@ -1519,12 +1720,17 @@
     edgeLoopA = edgeLoopA.map((e) => e.slice());
     edgeLoopB = edgeLoopB.map((e) => e.slice());
 
+<<<<<<< HEAD
     const bestOffset = bestEdgeLoopsOffset(edgeLoopA, edgeLoopB, mesh);
+=======
+    const bestOffset = bestEdgeLoopsOffset(edgeLoopB, edgeLoopA, mesh);
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
     offsetArray(edgeLoopB, bestOffset);
 
     const reversedEdgeLoopB = edgeLoopB.map((e) => e.slice().reverse()).reverse();
 
     const bestOffsetReversed = bestEdgeLoopsOffset(
+<<<<<<< HEAD
       edgeLoopA,
       reversedEdgeLoopB,
       mesh
@@ -1533,6 +1739,20 @@
     if (
       edgeLoopsLength(mesh, edgeLoopA, reverse ? edgeLoopB : reversedEdgeLoopB) <
       edgeLoopsLength(mesh, edgeLoopA, reverse ? reversedEdgeLoopB : edgeLoopB)
+=======
+      reversedEdgeLoopB,
+      edgeLoopA,
+      mesh
+    );
+    // Negation of `bestOffset2` since the array is reversed,
+    // Does it make ANY sense?
+    // It doesn't!
+    // It just happens to work.
+    offsetArray(reversedEdgeLoopB, -bestOffsetReversed);
+    if (
+      edgeLoopsLength(mesh, edgeLoopA, edgeLoopB) >
+      edgeLoopsLength(mesh, edgeLoopA, reversedEdgeLoopB)
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
     ) {
       edgeLoopB = reversedEdgeLoopB;
     }
@@ -1659,7 +1879,10 @@
     cutHoles,
     blendPath,
     blendInfluence,
+<<<<<<< HEAD
     reverse
+=======
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
   ) {
     Undo.initEdit({ elements: Mesh.selected, selection: true }, amend);
 
@@ -1762,11 +1985,15 @@
         };
       }
 
+<<<<<<< HEAD
       const furthestLoop = findMin(loops, e => e.centroid.length());
       loops.remove(furthestLoop);
 
       const sortedEdgeLoops = [furthestLoop];
       mesh.addVertices(sortedEdgeLoops[0].centroid.toArray());
+=======
+      const sortedEdgeLoops = [loops.pop()];
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
       while (loops.length) {
         const currEdgeLoop = sortedEdgeLoops.last();
         const closestLoop = findMin(loops, (e) =>
@@ -1792,7 +2019,10 @@
             numberOfCuts,
             blendPath,
             blendInfluence,
+<<<<<<< HEAD
             reverse
+=======
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
           }
         );
       }
@@ -1804,6 +2034,7 @@
     Undo.finishEdit("MTools: Bridged Edge Loops.");
   }
   action("bridge_edge_loops", () => {
+<<<<<<< HEAD
     runEdit$c(false, 2, 0, true, true, 1, false);
 
     Undo.amendEdit(
@@ -1813,6 +2044,17 @@
         //   label: "Reverse Winding",
         //   value: false,
         // },
+=======
+    runEdit$c(false, 2, 0, true, true, 1);
+
+    Undo.amendEdit(
+      {
+        blend_path: {
+          type: "checkbox",
+          label: "Blend Path",
+          value: true,
+        },
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
         blend_influence: {
           type: "number",
           label: "Smoothness",
@@ -1831,11 +2073,14 @@
           label: "Twist",
           value: 0,
         },
+<<<<<<< HEAD
         blend_path: {
           type: "checkbox",
           label: "Blend Path",
           value: true,
         },
+=======
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
         cut_holes: {
           type: "checkbox",
           label: "Cut Holes",
@@ -1851,7 +2096,10 @@
           form.cut_holes,
           form.blend_path,
           form.blend_influence / 100,
+<<<<<<< HEAD
           form.reverse
+=======
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
         );
       }
     );
@@ -1902,7 +2150,11 @@
 
   action("expand_selection", () => {
     Mesh.selected.forEach((mesh) => {
+<<<<<<< HEAD
       const neighborMap = Neighborhood.VertexVertices(mesh);
+=======
+      const neighborMap = computeVertexNeighborhood(mesh);
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
 
       const selectedVertices = mesh.getSelectedVertices();
       const selectedVertexSet = new Set(selectedVertices);
@@ -1926,7 +2178,11 @@
       if (!influence || !iterations) return; //
 
       const { vertices } = mesh;
+<<<<<<< HEAD
       const neighborMap = Neighborhood.VertexVertices(mesh);
+=======
+      const neighborMap = computeVertexNeighborhood(mesh);
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
 
       const selectedVertices = mesh.getSelectedVertices();
 
@@ -2033,7 +2289,11 @@
 
   action("shrink_selection", () => {
     Mesh.selected.forEach((mesh) => {
+<<<<<<< HEAD
       const neighborMap = Neighborhood.VertexVertices(mesh);
+=======
+      const neighborMap = computeVertexNeighborhood(mesh);
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
 
       const selectedVertices = mesh.getSelectedVertices();
       const selectedVertexSet = new Set(selectedVertices);
@@ -2538,6 +2798,7 @@
     );
   });
 
+<<<<<<< HEAD
   const LanguageDefinitions = {
     "word.before": "Input",
     "word.after": "Result",
@@ -2662,6 +2923,12 @@
 
     Undo.initEdit({ outliner: true, elements: [], selection: true }, amend);
 
+=======
+  const reusableEuler1 = new THREE.Euler();
+  function runEdit$4(mesh,selected, group, density, amend = false) {
+    const meshes = [];
+    Undo.initEdit({ elements: meshes, selection: true, group }, amend);
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
     /**
      * @type {THREE.Mesh}
      */
@@ -2671,20 +2938,34 @@
     const vertices = tmesh.geometry.getAttribute("position");
     const l = faces.count;
 
+<<<<<<< HEAD
     const points = [];
     for (let d = 0; d < density; d++) {
       const i = Math.floor((Math.random() * l) / 3) * 3; // random face index
       const t0 = reusableVec1.set(
+=======
+    for (let d = 0; d < density; d++) {
+      const i = Math.floor((Math.random() * l) / 3) * 3; // random face index
+      const t0 = new THREE.Vector3(
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
         vertices.getX(faces.getX(i)),
         vertices.getY(faces.getX(i)),
         vertices.getZ(faces.getX(i))
       );
+<<<<<<< HEAD
       const t1 = reusableVec2.set(
+=======
+      const t1 = new THREE.Vector3(
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
         vertices.getX(faces.getY(i)),
         vertices.getY(faces.getY(i)),
         vertices.getZ(faces.getY(i))
       );
+<<<<<<< HEAD
       const t2 = reusableVec3.set(
+=======
+      const t2 = new THREE.Vector3(
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
         vertices.getX(faces.getZ(i)),
         vertices.getY(faces.getZ(i)),
         vertices.getZ(faces.getZ(i))
@@ -2695,14 +2976,21 @@
       tmesh.localToWorld(t2);
 
       // f*ed up midpoint theroem
+<<<<<<< HEAD
       const pointA = reusableVec4.lerpVectors(t0, t1, Math.random());
       const pointB = reusableVec5.lerpVectors(t0, t2, Math.random());
 
       const point = new THREE.Vector3().lerpVectors(
+=======
+      const pointA = new THREE.Vector3().lerpVectors(t0, t1, Math.random());
+      const pointB = new THREE.Vector3().lerpVectors(t0, t2, Math.random());
+      const pointF = new THREE.Vector3().lerpVectors(
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
         pointA,
         pointB,
         Math.random()
       );
+<<<<<<< HEAD
       if (points.find((e) => e.distanceToSquared(point) < minDistanceSquared)) {
         continue;
       }
@@ -2711,11 +2999,16 @@
       /**
        * @type {Mesh}
        */
+=======
+
+      // scatter on points
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
       const otherMesh =
         selected[Math.floor(selected.length * Math.random())].duplicate();
 
       otherMesh.removeFromParent();
       otherMesh.parent = "root";
+<<<<<<< HEAD
 
       const currentScale = Math.lerp(
         scale,
@@ -2755,12 +3048,31 @@
       selection: true,
     });
     Canvas.updateAll();
+=======
+      Outliner.root.push(otherMesh);
+
+      const normal = computeTriangleNormal(t0, t1, t2);
+
+      const rotation = rotationFromDirection(normal, reusableEuler1);
+      otherMesh.rotation[0] = Math.radToDeg(rotation.x);
+      otherMesh.rotation[1] = Math.radToDeg(rotation.y);
+      otherMesh.rotation[2] = Math.radToDeg(rotation.z);
+
+      otherMesh.origin = pointF.toArray();
+
+      otherMesh.addTo(group);
+      meshes.push(otherMesh);
+    }
+    Undo.finishEdit("MTools: Scatter meshes");
+    Canvas.updatePositions();
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
   }
   action("scatter", function () {
     if (Mesh.selected.length < 2) {
       Blockbench.showQuickMessage("At least two meshes must be selected");
       return;
     }
+<<<<<<< HEAD
     dontShowAgainInfo(
       "scatter_pivot",
       "Good To Know",
@@ -2784,18 +3096,29 @@
         }),
       ].join("\n")
     );
+=======
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
 
     const mesh = Mesh.selected.last();
     mesh.unselect();
 
+<<<<<<< HEAD
     const selected = Mesh.selected.slice();
     runEdit$4(mesh, selected, {});
+=======
+    const group = new Group({ name: "instances_on_" + mesh.name });
+    group.init();
+
+    const selected = Mesh.selected.slice();
+    runEdit$4(mesh, selected, group, 3);
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
 
     Undo.amendEdit(
       {
         density: {
           type: "number",
           value: 3,
+<<<<<<< HEAD
           label: "Max Density",
           min: 0,
           max: 100,
@@ -2839,12 +3162,19 @@
           type: "number",
           value: 0,
           label: "Rotation Randomness",
+=======
+          label: "Density",
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
           min: 0,
           max: 100,
         },
       },
       (form) => {
+<<<<<<< HEAD
         runEdit$4(mesh, selected, form, true);
+=======
+        runEdit$4(mesh, selected, group, form.density, true);
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
       }
     );
   });
@@ -20202,7 +20532,11 @@
         }
       }
       for (const char of out.text) {
+<<<<<<< HEAD
         if (char != '\n' && !(char in content.glyphs)) {
+=======
+        if (!(char in content.glyphs)) {
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
           throwQuickMessage(
             `Character "${char}" doesn't exist on the provided font!`,
             2000
@@ -22928,6 +23262,10 @@
     elements.push(mesh);
     mesh.select();
     UVEditor.setAutoSize(null, true, Object.keys(mesh.faces));
+<<<<<<< HEAD
+=======
+    UVEditor.selected_faces.empty();
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
     Undo.finishEdit("MTools: Generate Mesh");
   }
   const dialog$1 = new Dialog({
@@ -22988,6 +23326,10 @@
     elements.push(mesh);
     mesh.select();
     UVEditor.setAutoSize(null, true, Object.keys(mesh.faces));
+<<<<<<< HEAD
+=======
+    UVEditor.selected_faces.empty();
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
     Undo.finishEdit("MTools: Generate Mesh");
   }
   const dialog = new Dialog({
@@ -23038,6 +23380,7 @@
    * @type {Array<THREE.Object3D>}
    */
   const meshToolTips = [];
+<<<<<<< HEAD
   BBPlugin.register(PLUGIN_ID, {
     new_repository_format: true,
     title: "MTools",
@@ -23053,6 +23396,23 @@
       Mesh.prototype.menu.structure.unshift(qualifyName("tools"));
       Mesh.prototype.menu.structure.unshift(qualifyName("operators"));
       MenuBar.addAction(qualifyName("generators"), "filter");
+=======
+  BBPlugin.register("mesh_tools", {
+    "new_repository_format": true,
+    "title": "MTools",
+    "author": "Malik12tree",
+    "icon": "icon.png",
+    "description": "Adds powerful mesh modeling tools, operators and generators!",
+    "version": "2.0.0",
+    "min_version": "4.9.4",
+    "variant": "both",
+    "tags": ["Format: Generic Model", "Mesh", "Tool"],
+    onload() {
+
+      Mesh.prototype.menu.structure.unshift("@meshtools/tools");
+      Mesh.prototype.menu.structure.unshift("@meshtools/operators");
+      MenuBar.addAction("@meshtools/generators", "filter");
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
     },
     onunload() {
       for (const deletable of deletables) {

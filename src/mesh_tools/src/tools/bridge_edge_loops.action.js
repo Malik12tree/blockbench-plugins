@@ -8,19 +8,31 @@
 
 import { action } from "../actions.js";
 import {
+<<<<<<< HEAD
   findMin,
   groupElementsCollided,
   lerp3,
   offsetArray,
 } from "../utils/array.js";
 import {
+=======
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
   CubicBezier as CB,
   closestToLine,
   computeCentroid,
   computeTriangleNormal,
   extractEdgeKey,
+<<<<<<< HEAD
   getSelectedEdgesConnectedCountMap,
   getSelectedFacesAndEdgesByVertices,
+=======
+  findMin,
+  getSelectedEdgesConnectedCountMap,
+  getSelectedFacesAndEdgesByVertices,
+  groupElementsCollided,
+  lerp3,
+  offsetArray,
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
   selectFacesAndEdgesByVertices,
 } from "../utils/utils.js";
 import {
@@ -118,7 +130,11 @@ function bridgeLoopsConfigured(
   edgeLoopB,
   centroidA,
   centroidB,
+<<<<<<< HEAD
   { twist, numberOfCuts, blendPath, blendInfluence, reverse }
+=======
+  { twist, numberOfCuts, blendPath, blendInfluence }
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
 ) {
   if (edgeLoopA.length < 3 || edgeLoopB.length < 3) {
     return;
@@ -126,12 +142,17 @@ function bridgeLoopsConfigured(
   edgeLoopA = edgeLoopA.map((e) => e.slice());
   edgeLoopB = edgeLoopB.map((e) => e.slice());
 
+<<<<<<< HEAD
   const bestOffset = bestEdgeLoopsOffset(edgeLoopA, edgeLoopB, mesh);
+=======
+  const bestOffset = bestEdgeLoopsOffset(edgeLoopB, edgeLoopA, mesh);
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
   offsetArray(edgeLoopB, bestOffset);
 
   const reversedEdgeLoopB = edgeLoopB.map((e) => e.slice().reverse()).reverse();
 
   const bestOffsetReversed = bestEdgeLoopsOffset(
+<<<<<<< HEAD
     edgeLoopA,
     reversedEdgeLoopB,
     mesh
@@ -140,6 +161,20 @@ function bridgeLoopsConfigured(
   if (
     edgeLoopsLength(mesh, edgeLoopA, reverse ? edgeLoopB : reversedEdgeLoopB) <
     edgeLoopsLength(mesh, edgeLoopA, reverse ? reversedEdgeLoopB : edgeLoopB)
+=======
+    reversedEdgeLoopB,
+    edgeLoopA,
+    mesh
+  );
+  // Negation of `bestOffset2` since the array is reversed,
+  // Does it make ANY sense?
+  // It doesn't!
+  // It just happens to work.
+  offsetArray(reversedEdgeLoopB, -bestOffsetReversed);
+  if (
+    edgeLoopsLength(mesh, edgeLoopA, edgeLoopB) >
+    edgeLoopsLength(mesh, edgeLoopA, reversedEdgeLoopB)
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
   ) {
     edgeLoopB = reversedEdgeLoopB;
   }
@@ -266,7 +301,10 @@ function runEdit(
   cutHoles,
   blendPath,
   blendInfluence,
+<<<<<<< HEAD
   reverse
+=======
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
 ) {
   Undo.initEdit({ elements: Mesh.selected, selection: true }, amend);
 
@@ -369,11 +407,15 @@ function runEdit(
       };
     }
 
+<<<<<<< HEAD
     const furthestLoop = findMin(loops, e => e.centroid.length());
     loops.remove(furthestLoop);
 
     const sortedEdgeLoops = [furthestLoop];
     mesh.addVertices(sortedEdgeLoops[0].centroid.toArray())
+=======
+    const sortedEdgeLoops = [loops.pop()];
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
     while (loops.length) {
       const currEdgeLoop = sortedEdgeLoops.last();
       const closestLoop = findMin(loops, (e) =>
@@ -399,7 +441,10 @@ function runEdit(
           numberOfCuts,
           blendPath,
           blendInfluence,
+<<<<<<< HEAD
           reverse
+=======
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
         }
       );
     }
@@ -415,11 +460,19 @@ export default action("bridge_edge_loops", () => {
 
   Undo.amendEdit(
     {
+<<<<<<< HEAD
       // reverse: {
       //   type: "checkbox",
       //   label: "Reverse Winding",
       //   value: false,
       // },
+=======
+      blend_path: {
+        type: "checkbox",
+        label: "Blend Path",
+        value: true,
+      },
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
       blend_influence: {
         type: "number",
         label: "Smoothness",
@@ -438,11 +491,14 @@ export default action("bridge_edge_loops", () => {
         label: "Twist",
         value: 0,
       },
+<<<<<<< HEAD
       blend_path: {
         type: "checkbox",
         label: "Blend Path",
         value: true,
       },
+=======
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
       cut_holes: {
         type: "checkbox",
         label: "Cut Holes",
@@ -458,7 +514,10 @@ export default action("bridge_edge_loops", () => {
         form.cut_holes,
         form.blend_path,
         form.blend_influence / 100,
+<<<<<<< HEAD
         form.reverse
+=======
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
       );
     }
   );

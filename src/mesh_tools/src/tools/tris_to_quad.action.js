@@ -1,6 +1,10 @@
 import { action } from "../actions.js";
+<<<<<<< HEAD
 import { minIndex } from "../utils/array.js";
 import { isValidQuad } from "../utils/utils.js";
+=======
+import { areVectorsCollinear, isValidQuad, minIndex } from "../utils/utils.js";
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
 
 function runEdit(maxAngle, ignoreDisjointUVs = true, amend = false) {
   Undo.initEdit({ elements: Mesh.selected, selection: true }, amend);

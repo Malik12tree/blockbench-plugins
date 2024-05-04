@@ -18,6 +18,10 @@ function runEdit(s, amended = false) {
   elements.push(mesh);
   mesh.select();
   UVEditor.setAutoSize(null, true, Object.keys(mesh.faces));
+<<<<<<< HEAD
+=======
+  UVEditor.selected_faces.empty();
+>>>>>>> f564e299cde39a3efce91b4549bc6b9db34cba80
   Undo.finishEdit("MTools: Generate Mesh");
 }
 const dialog = new Dialog({
