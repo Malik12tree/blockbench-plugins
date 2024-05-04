@@ -22928,7 +22928,6 @@
     elements.push(mesh);
     mesh.select();
     UVEditor.setAutoSize(null, true, Object.keys(mesh.faces));
-    UVEditor.selected_faces.empty();
     Undo.finishEdit("MTools: Generate Mesh");
   }
   const dialog$1 = new Dialog({
@@ -22989,7 +22988,6 @@
     elements.push(mesh);
     mesh.select();
     UVEditor.setAutoSize(null, true, Object.keys(mesh.faces));
-    UVEditor.selected_faces.empty();
     Undo.finishEdit("MTools: Generate Mesh");
   }
   const dialog = new Dialog({
